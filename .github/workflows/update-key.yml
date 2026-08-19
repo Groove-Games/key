@@ -28,14 +28,13 @@ jobs:
 
           print("Nova Key:", key)
           PY
-
+          
           - name: Commit e Push
             run: |
               git config user.name "github-actions[bot]"
               git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
               git add Key
-          
               git commit -m "Atualizar Key" || exit 0
           
               git pull --rebase origin main
