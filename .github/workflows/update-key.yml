@@ -1,0 +1,38 @@
+name: Atualizar Key
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-key:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Gerar nova Key
+        run: |
+          python3 - <<'PY'
+          import secrets
+
+          key = ''.join(str(secrets.randbelow(10)) for _ in range(32))
+
+          with open("Key", "w", encoding="utf-8") as f:
+              f.write(key)
+
+          print("Nova Key:", key)
+          PY
+
+      - name: Salvar nova Key
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Key
+          git diff --cached --quiet || git commit -m "Atualizar Key"
+          git push
