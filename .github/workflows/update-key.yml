@@ -20,7 +20,13 @@ jobs:
       - name: Baixar repositorio
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
+
+      - name: Sincronizar com GitHub
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
 
       - name: Gerar nova Key
         run: |
@@ -42,8 +48,6 @@ jobs:
 
           git add Key
 
-          git commit -m "Atualizar Key" || exit 0
+          git commit -m "Atualizar Key"
 
-          git pull --rebase origin main
-
-          git push origin main
+          git push origin HEAD:main
